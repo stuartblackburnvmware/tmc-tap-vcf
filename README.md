@@ -59,3 +59,32 @@ export HARBOR=<harbor-fqdn>
 helm dt unwrap vault-0.4.6.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
 helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f override-values.yaml
 ```
+
+Initialize vault server. Make note of the unseal keys and initial root token.
+
+kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator init
+
+
+Unseal vault server. Repeat this command 3 times and using 3 different unseal keys
+
+kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator unseal
+
+
+Repeat the previous step for all unsealed vault-servers. This will vary depending on the number of replicas your environment contains.
+Login to vault server:
+
+export VAULT_ADDR="https://vault.h2o-2-21144.h2o.vmware.com/"
+export VAULT_TOKEN="<from previous step>"
+vault login -tls-skip-verify
+
+
+Create secrets engine
+
+vault secrets enable -path=tkg-secrets -tls-skip-verify kv
+
+
+Add/read test secret to newly created secrets engine
+
+vault kv put -tls-skip-verify tkg-secrets/test-secret keyname=keyvalue
+vault kv list -tls-skip-verify tkg-secrets
+vault kv get -tls-skip-verify tkg-secrets/test-secret
