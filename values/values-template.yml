@@ -17,3 +17,16 @@ clusters:
     kubelet_storage: 100G
     containerd_storage: 100G
     ntp: 10.0.0.1
+  run:
+    mgmt_cluster: cluster01-wcp
+    name: tap-run
+    provisioner: tap-vcf
+    cp_count: 1
+    worker_count: 1
+    worker_vm_class: best-effort-large
+    cp_vm_class: best-effort-large
+    storage_class: my-storage-policy
+    k8s_version: v1.26.5+vmware.2-fips.1-tkg.1
+    kubelet_storage: 100G
+    containerd_storage: 100G
+    ntp: 10.0.0.1

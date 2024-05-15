@@ -1,12 +1,13 @@
 #@ load("@ytt:data", "data")
 #@ profile = data.values.profile
-#@ values = getattr(data.values.clusters, profile)
+#@ clusterGroupName = data.values.clustergroups[profile].clusterGroupName if profile in data.values.clustergroups else "shared-services"
+#@ values = getattr(data.values.clustergroups, clusterGroupName)
 fullName:
   managementClusterName: #@ values.mgmt_cluster
   name: #@ values.name
   provisionerName: #@ values.provisioner
 spec:
-  clusterGroupName: #@ data.values.clustergroups[values.name].clusterGroupName
+  clusterGroupName: #@ clusterGroupName
   topology:
     clusterClass: tanzukubernetescluster
     controlPlane:
