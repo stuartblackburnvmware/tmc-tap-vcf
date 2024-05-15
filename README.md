@@ -23,3 +23,10 @@ export PROFILE=shared-services
 ytt --data-values-file tanzu-cli/values.yaml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yaml > generated/$PROFILE-cluster.yaml
 tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
 ```
+
+## Enable Continuous Delivery on Cluster Group
+
+```
+export CLUSTERGROUP=<clustergroup-name>
+tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
+```
