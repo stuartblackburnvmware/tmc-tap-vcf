@@ -7,7 +7,7 @@ clusters:
   shared-services:
     mgmt_cluster: cluster01-wcp
     name: shared-services
-    provisioner: ss
+    provisioner: shared-services
     cp_count: 1
     worker_count: 1
     worker_vm_class: best-effort-large

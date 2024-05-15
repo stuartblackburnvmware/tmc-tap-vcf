@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
-#@ cluster_type = data.values.cluster_type
-#@ values = getattr(data.values.clustergroups, cluster_type)
+#@ clustergroup = data.values.clustergroup
+#@ values = getattr(data.values.clustergroups, clustergroup)
 ---
 fullName:
   name: #@ values.clusterGroupName

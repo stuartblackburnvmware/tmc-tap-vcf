@@ -1,9 +1,9 @@
 # TAP on VCF with TMC Guide
-This guide's purpose is to quickly stand up TAP using TMC in a VCF environment.
+This guide's purpose is to quickly stand up TAP using TMC in a VCF environment. Multiple TAP clusters will be created for the various sites and profiles. A shared-services cluster will also be created to host services such as Vault, Harbor, etc.
 
 ## Prereqs
 * TKGS is deployed with AVI
-* TKGS namespace created to be used for this new cluster
+* TKGS namespaces created for each required cluster
 * bitnamicharts project created on Harbor instance
 
 ## Tools
@@ -19,22 +19,35 @@ This needs to be done for 2 cluster groups, each with a different cluster type
 * shared-services
 * tap-vcf
 ```
-export CLUSTER_TYPE=<cluster-type>
-ytt --data-values-file tanzu-cli/values.yml --data-value cluster_type=$CLUSTER_TYPE -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
+export CLUSTERGROUP=<cluster-type>
+ytt --data-values-file tanzu-cli/values.yml --data-value clustergroup=$CLUSTERGROUP -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
 ```
 
-## Create cluster in TMC
+## Create clusters
+This needs to be done once for the shared-services cluster, and then one more time for each TAP profile you need
+* shared-services
+* run
+* view
+* build
+
 ```
-export PROFILE=shared-services
-ytt --data-values-file tanzu-cli/values.yaml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yaml > generated/$PROFILE-cluster.yaml
+export PROFILE=<profile-name>
+ytt --data-values-file tanzu-cli/values.yml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yml > generated/$PROFILE-cluster.yaml
 tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
 ```
 
-## Enable Continuous Delivery on Cluster Group
+## Enable helm and flux
+This needs to be done once for each cluster group
 
+The below commands enable flux at the cluster group level and install the source, helm, and kustomize controllers. These will be installed automatically on all clusters in this cluster group.
+
+Enable at the cluster group level. This needs to be done once for each cluster group
+* shared-services
+* tap-vcf
 ```
-export CLUSTERGROUP=<clustergroup-name>
-tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
+export CLUSTERGROUP=<cluster-group>
+tanzu tmc continuousdelivery enable -g $CLUSTERGROUP -s clustergroup
+tanzu tmc helm enable -g $CLUSTERGROUP -s clustergroup
 ```
 
 ## Vault Installation

@@ -6,7 +6,7 @@ fullName:
   name: #@ values.name
   provisionerName: #@ values.provisioner
 spec:
-  clusterGroupName: #@ data.values.clusterGroupName
+  clusterGroupName: #@ data.values.clustergroups[values.name].clusterGroupName
   topology:
     clusterClass: tanzukubernetescluster
     controlPlane:
