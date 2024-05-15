@@ -1,8 +1,12 @@
 # Steps to install temporary vault instance
+Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 
 ## Create cluster group in TMC
 ```
-export CG=shared-services
-ytt --data-value clusterGroupName=$CG -f tanzu-cli/cluster-group/cg-template.yaml > generated/$CG-cluster-group.yaml
-tanzu tmc clustergroup create -f generated/$CG-cluster-group.yaml
+ytt --data-values-file tanzu-cli/values -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
 ```
+
+## Create cluster in TMC
+```
+export CLUSTER=shared-services
+ytt --data-value cluster
