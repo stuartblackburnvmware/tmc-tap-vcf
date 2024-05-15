@@ -15,14 +15,12 @@ This guide's purpose is to quickly stand up TAP using TMC in a VCF environment.
 
 ## Create cluster groups in TMC
 
+This needs to be done for 2 cluster groups, each with a different cluster type
+* shared-services
+* tap-vcf
 ```
-# Define an array of cluster types
-CLUSTER_TYPES=("shared-services" "tap-vcf")
-
-# Iterate over each cluster type
-for CLUSTER_TYPE in "${CLUSTER_TYPES[@]}"; do
-  ytt --data-values-file tanzu-cli/values.yml --data-value cluster_type=$CLUSTER_TYPE -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
-done
+export CLUSTER_TYPE=<cluster-type>
+ytt --data-values-file tanzu-cli/values.yml --data-value cluster_type=$CLUSTER_TYPE -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
 ```
 
 ## Create cluster in TMC
