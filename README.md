@@ -31,10 +31,29 @@ export CLUSTERGROUP=<clustergroup-name>
 tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 ```
 
-## Login to Newly Created Cluster
+## Vault Installation
+### Login to Newly Created Cluster
 ```
 export CLUSTER=shared-services
 export WCP=cluster01-wcp.stuart-lab.xyz
 export CLUSTER_NAMESPACE=shared-services
 kubectl vsphere login --tanzu-kubernetes-cluster-name $CLUSTER --server $WCP --tanzu-kubernetes-cluster-namespace $CLUSTER_NAMESPACE --insecure-skip-tls-verify
+```
+
+### Create vault namespace
+```
+kubectl create namespace vault
+```
+
+### Install vault air-gapped via helm
+On machine with Internet access
+```
+helm dt wrap oci://docker.io/bitnamicharts/vault --version 0.4.6
+```
+
+Copy vault-0.4.6.wrap.tgz to machine in air-gapped environment and run the following:
+
+```
+helm dt unwrap vault-0.4.6.wrap.tgz oci://harbour.h2o-2-21144.h2o.vmware.com/bitnamicharts --insecure --yes
+helm install vault oci://harbour.h2o-2-21144.h2o.vmware.com/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f override-values.yaml
 ```
