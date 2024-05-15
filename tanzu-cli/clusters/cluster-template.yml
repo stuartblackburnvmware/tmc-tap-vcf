@@ -13,8 +13,8 @@ spec:
       metadata: {}
       osImage:
         arch: amd64
-        name: ubuntu
-        version: "20.04"
+        name: photon
+        version: "3"
       replicas: #@ values.cp_count
     network:
       pods:
@@ -32,8 +32,8 @@ spec:
         metadata: {}
         osImage:
           arch: amd64
-          name: ubuntu
-          version: "20.04"
+          name: photon
+          version: "3"
         overrides:
         - name: nodePoolVolumes
           value:

@@ -15,14 +15,14 @@ Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 
 ## Create cluster group in TMC
 ```
-ytt --data-values-file tanzu-cli/values.yaml -f tanzu-cli/cluster-group/cg-template.yaml | tanzu tmc clustergroup create -f-
+ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
 ```
 
 ## Create cluster in TMC
 ```
 export PROFILE=shared-services
-ytt --data-values-file tanzu-cli/values.yaml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yaml > generated/$PROFILE-cluster.yaml
-tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
+ytt --data-values-file tanzu-cli/values.yml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yml > generated/$PROFILE-cluster.yml
+tanzu tmc cluster create -f generated/$PROFILE-cluster.yml
 ```
 
 ## Enable Continuous Delivery on Cluster Group
