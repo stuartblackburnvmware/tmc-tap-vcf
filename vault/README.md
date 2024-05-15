@@ -1,5 +1,5 @@
-# TAP on VCF with TMC Guide
-This guide's purpose is to quickly stand up TAP using TMC in a VCF environment.
+# Guide to Install k8s Vault Instance
+Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 
 ## Prereqs
 * TKGS is deployed with AVI
@@ -13,16 +13,9 @@ This guide's purpose is to quickly stand up TAP using TMC in a VCF environment.
 * yq
 * ytt
 
-## Create cluster groups in TMC
-
+## Create cluster group in TMC
 ```
-# Define an array of cluster types
-CLUSTER_TYPES=("shared-services" "tap-vcf")
-
-# Iterate over each cluster type
-for CLUSTER_TYPE in "${CLUSTER_TYPES[@]}"; do
-  ytt --data-values-file tanzu-cli/values.yml --data-value cluster_type=$CLUSTER_TYPE -f tanzu-cli/cluster-group/cg-template.yml | tanzu tmc clustergroup create -f-
-done
+ytt --data-values-file tanzu-cli/values.yaml -f tanzu-cli/cluster-group/cg-template.yaml | tanzu tmc clustergroup create -f-
 ```
 
 ## Create cluster in TMC

@@ -1,4 +1,8 @@
-clusterGroupName: shared-services
+clustergroups:
+  shared-services:
+    clusterGroupName: shared-services
+  tap-vcf:
+    clusterGroupName: tap-vcf
 clusters:
   shared-services:
     mgmt_cluster: cluster01-wcp
