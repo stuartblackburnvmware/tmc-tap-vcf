@@ -1,2 +1,8 @@
 .vscode
-generated
+generated/*.yaml
+generated/*.yml
+generated/*.json
+values.yml
+values.yaml
+sensitive-values.yml
+sensitive-values.yaml
