@@ -6,3 +6,4 @@ values.yml
 values.yaml
 sensitive-values.yml
 sensitive-values.yaml
+vault-*.wrap.tgz
