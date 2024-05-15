@@ -30,3 +30,11 @@ tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
 export CLUSTERGROUP=<clustergroup-name>
 tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 ```
+
+## Login to Newly Created Cluster
+```
+export CLUSTER=shared-services
+export WCP=cluster01-wcp.stuart-lab.xyz
+export CLUSTER_NAMESPACE=shared-services
+kubectl vsphere login --tanzu-kubernetes-cluster-name $CLUSTER --server $WCP --tanzu-kubernetes-cluster-namespace $CLUSTER_NAMESPACE --insecure-skip-tls-verify
+```
