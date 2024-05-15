@@ -1,4 +1,4 @@
-# Steps to install temporary vault instance
+# Guide to Install k8s Vault Instance
 Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 
 ## Prereqs
@@ -14,7 +14,7 @@ Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 
 ## Create cluster group in TMC
 ```
-ytt --data-values-file tanzu-cli/values -f tanzu-cli/cluster-group/cg-template.yaml | tanzu tmc clustergroup create -f-
+ytt --data-values-file tanzu-cli/values.yaml -f tanzu-cli/cluster-group/cg-template.yaml | tanzu tmc clustergroup create -f-
 ```
 
 ## Create cluster in TMC
