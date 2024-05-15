@@ -57,7 +57,7 @@ Copy vault-0.4.6.wrap.tgz to machine in air-gapped environment and run the follo
 ```
 export HARBOR=<harbor-fqdn>
 helm dt unwrap vault-0.4.6.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
-helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f override-values.yaml
+helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f manifests/override-values.yaml
 ```
 
 Initialize vault server. Make note of the unseal keys and initial root token.
