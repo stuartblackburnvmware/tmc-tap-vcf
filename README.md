@@ -19,5 +19,7 @@ ytt --data-values-file tanzu-cli/values -f tanzu-cli/cluster-group/cg-template.y
 
 ## Create cluster in TMC
 ```
-export CLUSTER=shared-services
-ytt --data-value cluster
+export $PROFILE=shared-services
+ytt --data-values-file tanzu-cli/values --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yml > generated/$PROFILE-cluster.yaml
+tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
+```
