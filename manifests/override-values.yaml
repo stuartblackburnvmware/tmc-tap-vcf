@@ -1,9 +1,0 @@
-# work in progress
-server:
-  replicaCount: 1
-  ingress:
-    enabled: true
-    tls: true
-    hostname: vault.stuart-lab.com
-    annotations: 
-      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
