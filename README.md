@@ -4,6 +4,7 @@ Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
 ## Prereqs
 * TKGS is deployed with AVI
 * TKGS namespace created to be used for this new cluster
+* bitnamicharts project created on Harbor instance
 
 ## Tools
 * Tanzu CLI
@@ -54,6 +55,7 @@ helm dt wrap oci://docker.io/bitnamicharts/vault --version 0.4.6
 Copy vault-0.4.6.wrap.tgz to machine in air-gapped environment and run the following:
 
 ```
-helm dt unwrap vault-0.4.6.wrap.tgz oci://harbour.h2o-2-21144.h2o.vmware.com/bitnamicharts --insecure --yes
-helm install vault oci://harbour.h2o-2-21144.h2o.vmware.com/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f override-values.yaml
+export HARBOR=<harbor-fqdn>
+helm dt unwrap vault-0.4.6.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
+helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f override-values.yaml
 ```
