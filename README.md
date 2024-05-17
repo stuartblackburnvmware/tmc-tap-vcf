@@ -19,6 +19,7 @@ ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cluster-group/cg-templa
 ```
 
 ## Create cluster in TMC
+Replace PROFILE with the name of the shared-services cluster as needed
 ```
 export PROFILE=shared-services
 ytt --data-values-file tanzu-cli/values.yml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yml > generated/$PROFILE-cluster.yml
@@ -26,9 +27,9 @@ tanzu tmc cluster create -f generated/$PROFILE-cluster.yml
 ```
 
 ## Enable helm and flux on Cluster Group
-
+Replace CLUSTERGROUP with the name of the cluster group as needed
 ```
-export CLUSTERGROUP=<clustergroup-name>
+export CLUSTERGROUP=shared-services
 tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 tanzu tmc helm enable -g $CLUSTERGROUP -s clustergroup
 ```
