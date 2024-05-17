@@ -38,8 +38,8 @@ spec:
   values:
   - secretRef:
       name: cert-manager-data-values
-  # - secretRef:
-  #     name: overlay-namespace-label
+  - secretRef:
+      name: overlay-namespace-label
 
 ---
 apiVersion: v1
