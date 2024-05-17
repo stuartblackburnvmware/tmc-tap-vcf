@@ -27,8 +27,6 @@ kind: PackageInstall
 metadata:
   name: cert-manager
   namespace: tkg-system
-  # annotations:
-  #   ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: overlay-namespace-label
 spec:
   serviceAccountName: cert-manager-sa
   packageRef:
