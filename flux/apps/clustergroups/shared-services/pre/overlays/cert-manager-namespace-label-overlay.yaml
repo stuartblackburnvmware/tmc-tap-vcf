@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cert-manager-namespace-label-overlay
+  namespace: cert-manager
+type: Opaque
+stringData:
+  cert-manager-namespace-label-overlay.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.subset({"kind":"Namespace", "metadata":{"name":"cert-manager"}})
+    #@overlay/match-child-defaults missing_ok=True
+    ---
+    metadata:
+      #@overlay/match missing_ok=True
+      labels:
+        #@overlay/merge
+        pod-security.kubernetes.io/enforce: "privileged"
+
+    #@ end

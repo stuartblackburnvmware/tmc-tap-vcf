@@ -1,5 +1,16 @@
 # https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.4.12/tanzu-packages/packages-cert-mgr-super.html#install-cert-manager-using-kubectl-3
 
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: cert-manager
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+spec: {}
+status: {}
+
 --- 
 apiVersion: v1
 kind: ServiceAccount
@@ -27,6 +38,8 @@ kind: PackageInstall
 metadata:
   name: cert-manager
   namespace: cert-manager
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
 spec:
   serviceAccountName: cert-manager-sa
   packageRef:
