@@ -16,5 +16,3 @@ stringData:
       labels:
         #@overlay/merge
         pod-security.kubernetes.io/enforce: "privileged"
-
-    #@ end
