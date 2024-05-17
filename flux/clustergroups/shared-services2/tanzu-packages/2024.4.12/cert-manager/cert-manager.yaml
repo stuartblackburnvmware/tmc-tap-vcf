@@ -8,8 +8,8 @@ metadata:
   name: cert-manager
   labels:
     pod-security.kubernetes.io/enforce: privileged
-  # annotations:
-  #   kapp.k14s.io/change-group: "cert-manager/initial"
+  annotations:
+    kapp.k14s.io/change-group: "cert-manager/initial"
 spec: {}
 status: {}
 
@@ -40,8 +40,8 @@ kind: PackageInstall
 metadata:
   name: cert-manager
   namespace: cert-manager
-  # annotations:
-  #   kapp.k14s.io/change-rule: "upsert after upserting cert-manager/initial"
+  annotations:
+    kapp.k14s.io/change-rule: "upsert after upserting cert-manager/initial"
 spec:
   serviceAccountName: cert-manager-sa
   packageRef:
