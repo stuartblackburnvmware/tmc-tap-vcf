@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: overlay-namespace-label
-  namespace: cert-manager
+  namespace: tkg-system
 type: Opaque
 stringData:
   overlay-namespace-label.yaml: |

@@ -26,9 +26,9 @@ apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: cert-manager
-  namespace: cert-manager
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
+  namespace: tkg-system
+  annotations:
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: overlay-namespace-label
 spec:
   serviceAccountName: cert-manager-sa
   packageRef:
@@ -38,8 +38,6 @@ spec:
   values:
   - secretRef:
       name: cert-manager-data-values
-  # - secretRef:
-  #     name: overlay-namespace-label
 
 ---
 apiVersion: v1

@@ -3,19 +3,13 @@ items:
 - apiVersion: source.toolkit.fluxcd.io/v1
   kind: GitRepository
   metadata:
-    creationTimestamp: "2024-05-17T03:53:15Z"
-    finalizers:
-    - finalizers.fluxcd.io
     generation: 1
     labels:
       tmc.cloud.vmware.com/gitRepoIntentObj.Spec.SecretRef: infra-base
-      tmc.cloud.vmware.com/managed-git-repository-cluster-uid: 01HY29QE67ZF6MTK0D6YEA3A5Q
       tmc.cloud.vmware.com/managed-git-repository-name: infra-base
       tmc.cloud.vmware.com/source-secret-namespace: tanzu-continuousdelivery-resources
     name: infra-base
     namespace: tanzu-continuousdelivery-resources
-    resourceVersion: "157956"
-    uid: c35e8f76-c6f8-4dff-be4a-e25ef46489a1
   spec:
     interval: 1m0s
     ref:
@@ -24,28 +18,6 @@ items:
       name: tmc-infra-base
     timeout: 60s
     url: ssh://git@jump.stuart-lab.com:/home/git/shared-services-cluster.git
-  status:
-    artifact:
-      digest: sha256:e0da8434856315e1d2c94a322e74bc90657f9ef72248caea9a6d0466ad77e402
-      lastUpdateTime: "2024-05-17T13:05:39Z"
-      path: gitrepository/tanzu-continuousdelivery-resources/infra-base/6d618af95a8b4da3a2e25381a414974e9e319833.tar.gz
-      revision: main@sha1:6d618af95a8b4da3a2e25381a414974e9e319833
-      size: 5782
-      url: http://source-controller.tanzu-source-controller.svc.cluster.local./gitrepository/tanzu-continuousdelivery-resources/infra-base/6d618af95a8b4da3a2e25381a414974e9e319833.tar.gz
-    conditions:
-    - lastTransitionTime: "2024-05-17T13:05:39Z"
-      message: stored artifact for revision 'main@sha1:6d618af95a8b4da3a2e25381a414974e9e319833'
-      observedGeneration: 1
-      reason: Succeeded
-      status: "True"
-      type: Ready
-    - lastTransitionTime: "2024-05-17T13:05:39Z"
-      message: stored artifact for revision 'main@sha1:6d618af95a8b4da3a2e25381a414974e9e319833'
-      observedGeneration: 1
-      reason: Succeeded
-      status: "True"
-      type: ArtifactInStorage
-    observedGeneration: 1
 kind: List
 metadata:
   resourceVersion: ""
