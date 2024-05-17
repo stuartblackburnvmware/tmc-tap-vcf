@@ -8,9 +8,6 @@ spec:
   interval: 1m
   path: ./flux/apps/clustergroups/shared-services/pre
   prune: true
-  # postBuild:
-  #   substitute:
-  #     cluster_group: "shared-services"
   sourceRef:
     kind: GitRepository
     namespace: tanzu-continuousdelivery-resources
@@ -28,12 +25,6 @@ spec:
   prune: true
   dependsOn:
     - name: group-apps-pre
-  # postBuild:
-  #   substituteFrom:
-  #     - kind: Secret
-  #       name: cluster-name-secret
-  #   substitute:
-  #     cluster_group: "shared-services"
   sourceRef:
     kind: GitRepository
     namespace: tanzu-continuousdelivery-resources
