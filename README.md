@@ -1,5 +1,5 @@
-# Guide to Install k8s Vault Instance
-Hashicorp Vault will be installed on a k8s cluster using a bitnami helm chart.
+# Guide to Install Shared Services Cluster
+A k8s cluster will be installed to run shared services such as Hashicorp Vault, Harbor, etc.
 
 ## Prereqs
 * TKGS is deployed with AVI
@@ -33,6 +33,32 @@ tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 tanzu tmc helm enable -g $CLUSTERGROUP -s clustergroup
 ```
 
+## Bootstrap cluster with gitops
+This step configures the cluster group to use this git repo as the source for flux, specifically the flux folder. The gitops setup is done at the cluster group level so we don't need to individually bootstrap every cluster.
+
+Before creating the TMC objects, you will need to rename the folders in flux/clusters to match your cluster names. Also if your cluster group name is different than shared-services you will need to rename the folder in flux/clustergroups along with the paths in the flux/clustergroups/<group-name>/base.yml.
+
+Create the gitrepo in TMC
+```
+ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/git-repo-template.yml > generated/gitrepo.yml
+tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup
+```
+
+Create the base kustomization that will bootstrap the clusters and setup any initial infra.
+```
+ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/kust-template.yml > generated/kust.yml
+tanzu tmc continuousdelivery kustomization create -f generated/kust.yml -s clustergroup
+```
+
+At this point clusters should start syncing in multiple kustomizations. You can check their status using the below command. there will be some in a failed state until the TAP install is done.
+
+```
+kubectl get kustomizations -A
+```
+
+
+
+
 ## Vault Installation
 ### Login to Newly Created Cluster
 ```
@@ -48,16 +74,18 @@ kubectl create namespace vault
 ```
 
 ### Install vault air-gapped via helm
-On machine with Internet access
+On machine with Internet access. Replace VAULTVERSION with the desired version. 1.2.1 used in this example.
 ```
-helm dt wrap oci://docker.io/bitnamicharts/vault --version 0.4.6
+export VAULTVERSION=1.2.1
+helm dt wrap oci://docker.io/bitnamicharts/vault --version $VAULTVERSION
 ```
 
-Copy vault-0.4.6.wrap.tgz to machine in air-gapped environment and run the following:
+Copy vault-1.2.1.wrap.tgz to machine in air-gapped environment and run the following:
 
 ```
 export HARBOR=<harbor-fqdn>
-helm dt unwrap vault-0.4.6.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
+export VAULTVERSION=1.2.1
+helm dt unwrap vault-$VAULTVERSION.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
 helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f manifests/override-values.yaml
 ```
 

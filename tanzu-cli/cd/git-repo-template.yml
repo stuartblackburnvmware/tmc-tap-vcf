@@ -1,0 +1,15 @@
+#@ load("@ytt:data", "data")
+fullName:
+  clusterGroupName: #@ data.values.clusterGroupName
+  name: infra-base
+spec:
+  atomicSpec:
+    interval: 300s
+    ref:
+      branch: main
+    url: #@ data.values.gitrepo
+    secretRef.name: git-auth-ssh
+type:
+  kind: GitRepository
+  package: vmware.tanzu.manage.v1alpha1.clustergroup.namespace.fluxcd.gitrepository
+  version: v1alpha1
