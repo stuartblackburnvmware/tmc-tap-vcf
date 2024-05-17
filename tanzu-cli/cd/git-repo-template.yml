@@ -8,7 +8,8 @@ spec:
     ref:
       branch: main
     url: #@ data.values.gitrepo
-    secretRef.name: git-auth-ssh
+    secretRef:
+      name: local-git
 type:
   kind: GitRepository
   package: vmware.tanzu.manage.v1alpha1.clustergroup.namespace.fluxcd.gitrepository

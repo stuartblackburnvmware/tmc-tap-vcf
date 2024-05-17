@@ -38,7 +38,7 @@ This step configures the cluster group to use this git repo as the source for fl
 
 Before creating the TMC objects, you will need to rename the folders in flux/clusters to match your cluster names. Also if your cluster group name is different than shared-services you will need to rename the folder in flux/clustergroups along with the paths in the flux/clustergroups/<group-name>/base.yml.
 
-Create the gitrepo in TMC
+Create the gitrepo in TMC - THIS STEP IS DONE MANUALLY FOR THE MOMENT
 ```
 ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/git-repo-template.yml > generated/gitrepo.yml
 tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup

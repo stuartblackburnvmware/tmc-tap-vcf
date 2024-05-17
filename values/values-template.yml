@@ -1,5 +1,5 @@
 clusterGroupName: shared-services2
-gitrepo: ssh://git@jump.stuart-lab.com:/home/git/tmc-gitops.git
+gitrepo: ssh://git@jump.stuart-lab.com:/home/git/shared-services-cluster.git
 clusters:
   shared-services2:
     mgmt_cluster: cluster01-wcp
