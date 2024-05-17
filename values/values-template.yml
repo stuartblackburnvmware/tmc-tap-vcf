@@ -1,10 +1,10 @@
-clusterGroupName: shared-services2
+clusterGroupName: shared-services
 gitrepo: ssh://git@jump.stuart-lab.com:/home/git/shared-services-cluster.git
 clusters:
-  shared-services2:
+  shared-services:
     mgmt_cluster: cluster01-wcp
-    name: shared-services2
-    provisioner: shared-services2
+    name: shared-services
+    provisioner: shared-services
     cp_count: 1
     worker_count: 1
     worker_vm_class: best-effort-large

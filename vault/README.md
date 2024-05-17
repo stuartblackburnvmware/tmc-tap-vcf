@@ -20,7 +20,7 @@ ytt --data-values-file tanzu-cli/values.yaml -f tanzu-cli/cluster-group/cg-templ
 
 ## Create cluster in TMC
 ```
-export PROFILE=shared-services2
+export PROFILE=shared-services
 ytt --data-values-file tanzu-cli/values.yaml --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yaml > generated/$PROFILE-cluster.yaml
 tanzu tmc cluster create -f generated/$PROFILE-cluster.yaml
 ```
@@ -35,9 +35,9 @@ tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 ## Vault Installation
 ### Login to Newly Created Cluster
 ```
-export CLUSTER=shared-services2
+export CLUSTER=shared-services
 export WCP=cluster01-wcp.stuart-lab.xyz
-export CLUSTER_NAMESPACE=shared-services2
+export CLUSTER_NAMESPACE=shared-services
 kubectl vsphere login --tanzu-kubernetes-cluster-name $CLUSTER --server $WCP --tanzu-kubernetes-cluster-namespace $CLUSTER_NAMESPACE --insecure-skip-tls-verify
 ```
 
