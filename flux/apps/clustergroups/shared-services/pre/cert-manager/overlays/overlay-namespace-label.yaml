@@ -5,7 +5,7 @@ metadata:
   namespace: cert-manager
 type: Opaque
 stringData:
-  cert-manager-namespace-label-overlay.yaml: |
+  overlay-namespace-label.yaml: |
     #@ load("@ytt:overlay", "overlay")
 
     #@overlay/match by=overlay.subset({"kind":"Namespace", "metadata":{"name":"cert-manager"}})
