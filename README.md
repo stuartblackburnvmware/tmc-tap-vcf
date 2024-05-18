@@ -39,7 +39,17 @@ This step configures the cluster group to use this git repo as the source for fl
 
 Before creating the TMC objects, you will need to rename the folders in flux/clusters to match your cluster names. Also if your cluster group name is different than shared-services you will need to rename the folder in flux/clustergroups along with the paths in the flux/clustergroups/<group-name>/base.yml.
 
-Create the gitrepo in TMC - THIS STEP IS DONE MANUALLY FOR THE MOMENT
+Create the gitrepo in TMC
+
+This step is done manually for now since the current version of TMC-SM doesn't support this for air-gapped git servers
+
+Under your cluster group->Add-ons->Repository Credentials, create an SSH key repository credential
+
+Note: Known hosts can be retrieved by running a `ssh-keyscan <git-server>` against your git server
+
+Under your cluster group->Add-ons->Git repositories, add a Git repository pointing to your repo. Select the repository credential created in the previous step.
+
+Once TMC-SM supports this for air-gapped git servers, it could be added with a command similar to the following:
 ```
 ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/git-repo-template.yml > generated/gitrepo.yml
 tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup
