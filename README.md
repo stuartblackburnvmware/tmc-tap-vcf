@@ -90,7 +90,8 @@ Copy vault-1.2.1.wrap.tgz to machine in air-gapped environment and run the follo
 export HARBOR=<harbor-fqdn>
 export VAULTVERSION=1.2.1
 helm dt unwrap vault-$VAULTVERSION.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
-helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f manifests/override-values.yaml
+ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/vault/override-values.yml > generated/override-values.yml
+helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f generated/override-values.yml
 ```
 
 ### Initialize vault

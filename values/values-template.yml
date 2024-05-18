@@ -1,5 +1,7 @@
 clusterGroupName: shared-services
-gitrepo: ssh://git@jump.stuart-lab.com:/home/git/shared-services-cluster.git
+gitrepo: ssh://git@gitserver.example.com:/home/git/shared-services-cluster.git
+vault_fqdn: vault.example.com
+vault_replicas: 1
 clusters:
   shared-services:
     mgmt_cluster: cluster01-wcp
