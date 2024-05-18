@@ -55,6 +55,7 @@ ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/git-repo-template.ym
 tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup
 ```
 
+### Create kustomizations
 Create the base kustomization that will bootstrap the clusters and setup any initial infra.
 ```
 ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/kust-template.yml > generated/kust.yml
