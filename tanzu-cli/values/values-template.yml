@@ -3,9 +3,22 @@ gitrepo: ssh://git@gitserver.example.com:/home/git/shared-services-cluster.git
 vault_fqdn: vault.example.com
 vault_replicas: 1
 clusters:
-  shared-services:
+  site1-ss:
     mgmt_cluster: cluster01-wcp
-    name: shared-services
+    name: site1-ss
+    provisioner: shared-services
+    cp_count: 1
+    worker_count: 1
+    worker_vm_class: best-effort-large
+    cp_vm_class: best-effort-large
+    storage_class: my-storage-policy
+    k8s_version: v1.26.5+vmware.2-fips.1-tkg.1
+    kubelet_storage: 100G
+    containerd_storage: 100G
+    ntp: 10.0.0.1
+  site2-ss:
+    mgmt_cluster: cluster01-wcp
+    name: site2-ss
     provisioner: shared-services
     cp_count: 1
     worker_count: 1
