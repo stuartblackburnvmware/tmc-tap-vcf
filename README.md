@@ -56,7 +56,7 @@ tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s cl
 ```
 
 ### Create kustomizations
-Create the base kustomization that will bootstrap the clusters and setup any initial infra.
+Create the base kustomization that will bootstrap the clusters and setup any initial infra. Kustomizations are split into pre and post in order to support deploying items which are dependent on other items.
 ```
 ytt --data-values-file tanzu-cli/values.yml -f tanzu-cli/cd/kust-template.yml > generated/kust.yml
 tanzu tmc continuousdelivery kustomization create -f generated/kust.yml -s clustergroup
@@ -77,11 +77,6 @@ export CLUSTER_NAMESPACE=shared-services
 kubectl vsphere login --tanzu-kubernetes-cluster-name $CLUSTER --server $WCP --tanzu-kubernetes-cluster-namespace $CLUSTER_NAMESPACE --insecure-skip-tls-verify
 ```
 
-### Create vault namespace
-```
-kubectl create namespace vault
-```
-
 ### Install vault air-gapped via helm
 On machine with Internet access. Replace VAULTVERSION with the desired version. 1.2.1 used in this example.
 ```
@@ -98,31 +93,31 @@ helm dt unwrap vault-$VAULTVERSION.wrap.tgz oci://$HARBOR/bitnamicharts --insecu
 helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f manifests/override-values.yaml
 ```
 
-Initialize vault server. Make note of the unseal keys and initial root token.
-
+### Initialize vault
+Run the following command to initialize vault. Make note of the unseal keys and initial root token.
+```
 kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator init
-
-
+```
 Unseal vault server. Repeat this command 3 times and using 3 different unseal keys
-
+```
 kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator unseal
+```
 
-
-Repeat the previous step for all unsealed vault-servers. This will vary depending on the number of replicas your environment contains.
-Login to vault server:
-
-export VAULT_ADDR="https://vault.h2o-2-21144.h2o.vmware.com/"
+### Login to vault server
+```
+export VAULT_ADDR="<vault-fqdn>"
 export VAULT_TOKEN="<from previous step>"
 vault login -tls-skip-verify
+```
 
+### Create secrets engine
+```
+vault secrets enable -path=secret -tls-skip-verify kv
+```
 
-Create secrets engine
-
-vault secrets enable -path=tkg-secrets -tls-skip-verify kv
-
-
-Add/read test secret to newly created secrets engine
-
-vault kv put -tls-skip-verify tkg-secrets/test-secret keyname=keyvalue
-vault kv list -tls-skip-verify tkg-secrets
-vault kv get -tls-skip-verify tkg-secrets/test-secret
+### Add/read test secret to newly created secrets engine
+```
+vault kv put -tls-skip-verify secret/test-secret testkeyname=testkeyvalue
+vault kv list -tls-skip-verify secret
+vault kv get -tls-skip-verify secret/test-secret
+```
