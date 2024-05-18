@@ -14,7 +14,7 @@ A k8s cluster will be installed to run shared services such as Hashicorp Vault, 
 * ytt
 
 ## Prep values file
-Copy the tanzu-cli/values/values-template.yml to tanzu-cli/values/sensitive-values.yml
+Copy the `tanzu-cli/values/values-template.yml` to `tanzu-cli/values/values.yml`
 
 ## Create cluster group in TMC
 ```
