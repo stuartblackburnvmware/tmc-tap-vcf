@@ -68,9 +68,6 @@ At this point clusters should start syncing in multiple kustomizations. You can 
 kubectl get kustomizations -A
 ```
 
-
-
-
 ## Vault Installation
 ### Login to Newly Created Cluster
 ```
