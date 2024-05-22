@@ -6,7 +6,7 @@ clusters:
   site1-ss:
     mgmt_cluster: cluster01-wcp
     name: site1-ss
-    provisioner: shared-services
+    provisioner: site1-ss
     cp_count: 1
     worker_count: 1
     worker_vm_class: best-effort-large
@@ -19,7 +19,7 @@ clusters:
   site2-ss:
     mgmt_cluster: cluster01-wcp
     name: site2-ss
-    provisioner: shared-services
+    provisioner: site2-ss
     cp_count: 1
     worker_count: 1
     worker_vm_class: best-effort-large
