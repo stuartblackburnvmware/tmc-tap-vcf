@@ -1,10 +1,9 @@
-# Guide to Install Shared Services Cluster
-A k8s cluster will be installed to run shared services such as Hashicorp Vault, Harbor, etc.
+# Guide to Install TAP Clusters via TMC
+TAP clusters will be rolled out using TMC. This guide details the steps involved in that process.
 
 ## Prereqs
 * TKGS is deployed with AVI
-* TKGS namespace created to be used for this new cluster
-* bitnamicharts project created on Harbor instance
+* TKGS namespace created to be used for the new clusters
 
 ## Tools
 * Tanzu CLI
@@ -25,9 +24,9 @@ ytt --data-values-file tanzu-cli/values -f tanzu-cli/cluster-group/cg-template.y
 ```
 
 ## Create cluster in TMC
-Replace PROFILE with the name of the shared-services cluster as needed
+Replace PROFILE with the name of the TAP cluster as needed
 ```
-export PROFILE=site1-ss
+export PROFILE=site1-tap-run
 ytt --data-values-file tanzu-cli/values --data-value profile=$PROFILE -f tanzu-cli/clusters/cluster-template.yml > generated/$PROFILE-cluster.yml
 tanzu tmc cluster create -f generated/$PROFILE-cluster.yml
 ```
@@ -35,7 +34,7 @@ tanzu tmc cluster create -f generated/$PROFILE-cluster.yml
 ## Enable helm and flux on Cluster Group
 Replace CLUSTERGROUP with the name of the cluster group as needed
 ```
-export CLUSTERGROUP=shared-services
+export CLUSTERGROUP=tap-vcf
 tanzu tmc continuousdelivery enable -s clustergroup -g $CLUSTERGROUP
 tanzu tmc helm enable -g $CLUSTERGROUP -s clustergroup
 ```
@@ -43,11 +42,11 @@ tanzu tmc helm enable -g $CLUSTERGROUP -s clustergroup
 ## Bootstrap cluster with gitops
 This step configures the cluster group to use this git repo as the source for flux, specifically the flux folder. The gitops setup is done at the cluster group level so we don't need to individually bootstrap every cluster.
 
-Before creating the TMC objects, you will need to rename the folders in flux/clusters to match your cluster names. Also if your cluster group name is different than shared-services you will need to rename the folder in flux/clustergroups along with the paths in the flux/clustergroups/<group-name>/base.yml.
+Before creating the TMC objects, you will need to rename the folders in flux/clusters to match your cluster names. Also if your cluster group name is different than tap-vcf you will need to rename the folder in flux/clustergroups along with the paths in the flux/clustergroups/<group-name>/base.yml.
 
 ### Create the gitrepo in TMC
 
-This step is done manually for now since the current version of TMC-SM doesn't support this for air-gapped git servers
+This step is done manually for now since the current version of TMC-SM doesn't support everything we need. TODO: Automate this
 
 Under your cluster group->Add-ons->Repository Credentials, create an SSH key repository credential
 
@@ -55,7 +54,7 @@ Note: Known hosts can be retrieved by running a `ssh-keyscan <git-server>` again
 
 Under your cluster group->Add-ons->Git repositories, add a Git repository pointing to your repo. Select the repository credential created in the previous step.
 
-Once TMC-SM supports this for air-gapped git servers, it could be added with a command similar to the following:
+Once this is automated, it could be added with a command similar to the following:
 ```
 ytt --data-values-file tanzu-cli/values -f tanzu-cli/cd/git-repo-template.yml > generated/gitrepo.yml
 tanzu tmc continuousdelivery gitrepository create -f generated/gitrepo.yml -s clustergroup
@@ -72,65 +71,4 @@ At this point clusters should start syncing in multiple kustomizations. You can 
 
 ```
 kubectl get kustomizations -A
-```
-
-## Vault Installation
-### Login to Newly Created Cluster
-```
-export CLUSTER=site1-ss
-export WCP=cluster01-wcp.stuart-lab.xyz
-export CLUSTER_NAMESPACE=shared-services
-kubectl vsphere login --tanzu-kubernetes-cluster-name $CLUSTER --server $WCP --tanzu-kubernetes-cluster-namespace $CLUSTER_NAMESPACE --insecure-skip-tls-verify
-```
-
-### Install vault air-gapped via helm
-On machine with Internet access. Replace VAULTVERSION with the desired version. 1.2.1 used in this example.
-```
-export VAULTVERSION=1.2.1
-helm dt wrap oci://docker.io/bitnamicharts/vault --version $VAULTVERSION
-```
-
-Copy vault-1.2.1.wrap.tgz to machine in air-gapped environment and run the following
-NOTE: Ensure the helm dt plugin version you're unwrapping with matches the version it was wrapped with. Otherwise you may get errors.
-NOTE: If `helm dt` is difficult to install on the air-gapped server, you can also use the standalone `dt`
-
-```
-export HARBOR=<harbor-fqdn>
-export VAULTVERSION=1.2.1
-helm dt unwrap vault-$VAULTVERSION.wrap.tgz oci://$HARBOR/bitnamicharts --insecure --yes
-ytt --data-values-file tanzu-cli/values -f tanzu-cli/vault/override-values.yml > generated/override-values.yml
-helm install vault oci://$HARBOR/bitnamicharts/vault -n vault --insecure-skip-tls-verify -f generated/override-values.yml
-```
-
-### Initialize vault
-Run the following command to initialize vault. Make note of the unseal keys and initial root token.
-```
-kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator init
-```
-Unseal vault server. Repeat this command 3 times and using 3 different unseal keys
-```
-kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator unseal
-```
-### Install vault cli
-Download the desired version of the vault CLI from https://developer.hashicorp.com/vault/downloads on a machine with Internet access
-
-Copy the download zip file to the air-gapped jump server and extract it. Copy the extracted `vault` file to `/usr/local/bin`
-
-### Login to vault server
-```
-export VAULT_ADDR="http://<vault-fqdn>" #TO DO - CHANGE TO HTTPS
-export VAULT_TOKEN="<from previous step>"
-vault login -tls-skip-verify
-```
-
-### Create secrets engine
-```
-vault secrets enable -path=secret -tls-skip-verify kv
-```
-
-### Add/read test secret to newly created secrets engine
-```
-vault kv put -tls-skip-verify secret/test-secret testkeyname=testkeyvalue
-vault kv list -tls-skip-verify secret
-vault kv get -tls-skip-verify secret/test-secret
 ```
