@@ -90,7 +90,9 @@ export VAULTVERSION=1.2.1
 helm dt wrap oci://docker.io/bitnamicharts/vault --version $VAULTVERSION
 ```
 
-Copy vault-1.2.1.wrap.tgz to machine in air-gapped environment and run the following:
+Copy vault-1.2.1.wrap.tgz to machine in air-gapped environment and run the following
+NOTE: Ensure the helm dt plugin version you're unwrapping with matches the version it was wrapped with. Otherwise you may get errors.
+NOTE: If `helm dt` is difficult to install on the air-gapped server, you can also use the standalone `dt`
 
 ```
 export HARBOR=<harbor-fqdn>
@@ -109,10 +111,14 @@ Unseal vault server. Repeat this command 3 times and using 3 different unseal ke
 ```
 kubectl exec --stdin=true --tty=true --namespace=vault vault-server-0 -- vault operator unseal
 ```
+### Install vault cli
+Download the desired version of the vault CLI from https://developer.hashicorp.com/vault/downloads on a machine with Internet access
+
+Copy the download zip file to the air-gapped jump server and extract it. Copy the extracted `vault` file to `/usr/local/bin`
 
 ### Login to vault server
 ```
-export VAULT_ADDR="<vault-fqdn>"
+export VAULT_ADDR="http://<vault-fqdn>" #TO DO - CHANGE TO HTTPS
 export VAULT_TOKEN="<from previous step>"
 vault login -tls-skip-verify
 ```
