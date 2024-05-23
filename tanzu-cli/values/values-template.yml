@@ -1,14 +1,12 @@
-clusterGroupName: shared-services
-gitrepo: ssh://git@gitserver.example.com:/home/git/shared-services-cluster.git
-vault_fqdn: vault.example.com
-vault_replicas: 1
+clusterGroupName: tap-vcf
+gitrepo: ssh://git@gitserver.example.com:/home/git/tmc-tap-vcf.git
 clusters:
-  site1-ss:
+  site1-tap-run:
     mgmt_cluster: cluster01-wcp
-    name: site1-ss
-    provisioner: site1-ss
+    name: site1-tap-run
+    provisioner: site1-tap
     cp_count: 1
-    worker_count: 1
+    worker_count: 3
     worker_vm_class: best-effort-large
     cp_vm_class: best-effort-large
     storage_class: my-storage-policy
@@ -16,12 +14,12 @@ clusters:
     kubelet_storage: 100G
     containerd_storage: 100G
     ntp: 10.0.0.1
-  site2-ss:
+  site2-tap-run:
     mgmt_cluster: cluster01-wcp
-    name: site2-ss
-    provisioner: site2-ss
+    name: site2-tap-run
+    provisioner: site2-tap
     cp_count: 1
-    worker_count: 1
+    worker_count: 3
     worker_vm_class: best-effort-large
     cp_vm_class: best-effort-large
     storage_class: my-storage-policy

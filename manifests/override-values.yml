@@ -1,8 +1,0 @@
-server:
-  replicaCount: 1
-  ingress:
-    enabled: true
-    tls: true
-    hostname: vault.h2o-2-21144.h2o.vmware.com
-    annotations: 
-      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
