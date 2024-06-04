@@ -10,7 +10,7 @@ spec:
   - git:
       ref: main
       secretRef:
-        name: sync-git
+        name: git-auth
       subPath: deliverables
       url: git@jump.stuart-lab.com:/home/git/run-vcf.git
   serviceAccountName: deliverable-sa
