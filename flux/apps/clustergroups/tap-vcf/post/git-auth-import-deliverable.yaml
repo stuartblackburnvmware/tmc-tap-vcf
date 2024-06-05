@@ -1,8 +1,0 @@
----
-apiVersion: secretgen.carvel.dev/v1alpha1
-kind: SecretImport
-metadata:
-  name: sync-git
-  namespace: deliverable
-spec:
-  fromNamespace: tanzu-sync
